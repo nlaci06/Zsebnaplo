@@ -3,30 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zseb-Napló Pro - Bingó & Pénzügyek</title>
+    <title>Zseb-Napló Pro</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="main-wrapper">
+
+    <div id="viewSelector" class="overlay">
+        <div class="selector-box">
+            <h2>💰 Zseb-Napló</h2>
+            <p>Válassz nézetet a kezdéshez:</p>
+            <div class="selector-buttons">
+                <button onclick="setView('desktop')">💻 Gépes</button>
+                <button onclick="setView('mobile')">📱 Mobil</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="appContainer" class="main-wrapper hidden">
         <aside class="sidebar">
             <h2>Egyenlegek</h2>
-            <div class="balance-card card-style">
-                <p>💳 Bankkártya</p>
-                <h3 id="cardBalance">0 Ft</h3>
+            <div class="balance-grid">
+                <div class="balance-card card-style">
+                    <p>💳 Kártya</p>
+                    <h3 id="cardBalance">0 Ft</h3>
+                </div>
+                <div class="balance-card cash-style">
+                    <p>💵 KP</p>
+                    <h3 id="cashBalance">0 Ft</h3>
+                </div>
             </div>
-            <div class="balance-card cash-style">
-                <p>💵 Készpénz</p>
-                <h3 id="cashBalance">0 Ft</h3>
-            </div>
-            <div class="chart-container-mini">
-                <canvas id="balanceChart"></canvas>
-            </div>
+            <canvas id="balanceChart"></canvas>
+            <button onclick="resetEverything()" class="reset-btn">⚠️ Memória törlése</button>
         </aside>
 
         <main class="content">
             <header>
-                <h1>Pénzügyi Napló</h1>
+                <h1>Pénzügyek</h1>
                 <input type="month" id="monthSelector" onchange="updateUI()">
             </header>
 
@@ -55,18 +68,17 @@
                     <option value="🎰 Játék">🎰 Játék</option>
                     <option value="❓ Egyéb">❓ Egyéb</option>
                 </select>
-                <button id="addBtn">Hozzáadás</button>
+                <button id="addBtn" class="primary-btn">Hozzáadás</button>
             </section>
 
-            <h3>Havi kiadások megoszlása</h3>
-            <div class="chart-container-main">
+            <div class="chart-container">
                 <canvas id="expenseChart"></canvas>
             </div>
 
-            <ul id="transactionList" class="transaction-list">
-                </ul>
+            <ul id="transactionList" class="transaction-list"></ul>
         </main>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
