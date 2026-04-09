@@ -7,9 +7,8 @@
 
 body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #2d3436; }
 
-.main-wrapper { display: flex; max-width: 1200px; margin: 20px auto; gap: 20px; padding: 0 15px; }
-
-/* ASZTALI ELRENDEZÉS */
+/* ASZTALI NÉZET (Alapértelmezett) */
+.main-wrapper { display: flex; max-width: 1100px; margin: 30px auto; gap: 20px; padding: 0 15px; }
 .sidebar { flex: 1; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: fit-content; }
 .content { flex: 2.5; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
@@ -17,33 +16,33 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); co
 .card-style { background: var(--card); }
 .cash-style { background: var(--cash); }
 
-.input-form { display: flex; flex-direction: column; gap: 15px; background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 30px; }
-.input-row { display: flex; gap: 10px; }
-.input-row * { flex: 1; }
+.input-form { display: flex; flex-direction: column; gap: 12px; background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
+.input-group { display: flex; gap: 10px; }
+.input-group * { flex: 1; min-width: 0; } /* Fontos: min-width: 0 gátolja meg a szétcsúszást */
 
-input, select, button { padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 1rem; }
+input, select, button { padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; }
 .primary-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-.reset-btn { background: #ff7675; color: white; border: none; width: 100%; margin-top: 15px; padding: 10px; border-radius: 10px; cursor: pointer; }
+.reset-btn { background: #ff7675; color: white; border: none; width: 100%; margin-top: 20px; padding: 10px; border-radius: 10px; cursor: pointer; }
 
 .main-chart-box { height: 300px; margin-bottom: 30px; }
-.mini-chart-box { margin-top: 20px; }
 
-/* MOBIL AUTOMATIKUS NÉZET (768px alatt aktiválódik) */
+/* MOBIL NÉZET (Automatikusan kapcsol) */
 @media (max-width: 768px) {
-    .main-wrapper { flex-direction: column; margin: 0; padding: 10px; }
-    .sidebar, .content { width: auto; padding: 15px; }
+    .main-wrapper { flex-direction: column; margin: 10px; gap: 15px; }
+    .sidebar, .content { width: auto; padding: 20px; }
     
+    /* Mobil egyenlegek egymás mellett */
     .balance-grid { display: flex; gap: 10px; }
-    .balance-card { margin-bottom: 0; flex: 1; padding: 10px; }
+    .balance-card { flex: 1; margin-bottom: 0; padding: 12px; }
     .balance-card h3 { font-size: 1.1rem; }
 
-    .input-row { flex-direction: column; }
-    input, select, button { font-size: 1.1rem; padding: 14px; }
+    /* Mobil beviteli mezők egymás alá, hogy kényelmes legyen */
+    .input-group { flex-direction: column; }
+    input, select, button { padding: 14px; font-size: 1.1rem; }
     
-    header { flex-direction: column; gap: 10px; text-align: center; }
+    header { flex-direction: column; gap: 15px; text-align: center; }
 }
 
 .transaction-list { list-style: none; padding: 0; }
 .t-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
-.t-amount { font-weight: bold; margin-right: 10px; }
-.delete-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; }
+.delete-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
