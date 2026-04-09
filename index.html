@@ -2,25 +2,13 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Zseb-Napló Pro</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
-    <div id="viewSelector" class="overlay">
-        <div class="selector-box">
-            <h2>💰 Zseb-Napló</h2>
-            <p>Válassz nézetet a kezdéshez:</p>
-            <div class="selector-buttons">
-                <button onclick="setView('desktop')">💻 Gépes</button>
-                <button onclick="setView('mobile')">📱 Mobil</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="appContainer" class="main-wrapper hidden">
+    <div class="main-wrapper">
         <aside class="sidebar">
             <h2>Egyenlegek</h2>
             <div class="balance-grid">
@@ -33,7 +21,9 @@
                     <h3 id="cashBalance">0 Ft</h3>
                 </div>
             </div>
-            <canvas id="balanceChart"></canvas>
+            <div class="mini-chart-box">
+                <canvas id="balanceChart"></canvas>
+            </div>
             <button onclick="resetEverything()" class="reset-btn">⚠️ Memória törlése</button>
         </aside>
 
@@ -44,7 +34,7 @@
             </header>
 
             <section class="input-form">
-                <div class="row">
+                <div class="input-row">
                     <select id="method">
                         <option value="kártya">💳 Kártya</option>
                         <option value="készpénz">💵 KP</option>
@@ -71,14 +61,13 @@
                 <button id="addBtn" class="primary-btn">Hozzáadás</button>
             </section>
 
-            <div class="chart-container">
+            <div class="main-chart-box">
                 <canvas id="expenseChart"></canvas>
             </div>
 
             <ul id="transactionList" class="transaction-list"></ul>
         </main>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
