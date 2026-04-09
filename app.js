@@ -2,108 +2,94 @@ let transactions = JSON.parse(localStorage.getItem('walletData')) || [];
 let expenseChart = null;
 let balanceChart = null;
 
-// Automatikus dátum beállítása a mai napra
-function initDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    document.getElementById('monthSelector').value = `${year}-${month}`;
+// NÉZET BEÁLLÍTÁSA
+function setView(mode) {
+    if (mode === 'mobile') {
+        document.body.classList.add('mobile-view');
+    }
+    document.getElementById('viewSelector').classList.add('hidden');
+    document.getElementById('appContainer').classList.remove('hidden');
+    updateUI();
 }
 
-initDate();
-
-// Hozzáadás esemény
+// Alap dátum
+document.getElementById('monthSelector').value = new Date().toISOString().slice(0, 7);
 document.getElementById('addBtn').addEventListener('click', addItem);
 
 function addItem() {
-    const amountVal = document.getElementById('amount').value;
+    const amt = document.getElementById('amount').value;
     const type = document.getElementById('type').value;
     const method = document.getElementById('method').value;
-    const category = document.getElementById('category').value;
-    const selectedMonth = document.getElementById('monthSelector').value;
+    const cat = document.getElementById('category').value;
+    const month = document.getElementById('monthSelector').value;
 
-    if (!amountVal || amountVal <= 0) {
-        alert("Kérlek adj meg egy összeget!");
-        return;
-    }
-
-    const now = new Date();
-    const timestamp = now.toLocaleString('hu-HU', { 
-        year: 'numeric', month: '2-digit', day: '2-digit', 
-        hour: '2-digit', minute: '2-digit' 
-    });
+    if (!amt || amt <= 0) return;
 
     const item = {
         id: Date.now(),
-        amount: type === 'expense' ? -Math.abs(amountVal) : Math.abs(amountVal),
-        method: method,
-        category: type === 'income' ? '💰 Bevétel' : category,
-        month: selectedMonth,
-        fullTime: timestamp
+        amount: type === 'expense' ? -Math.abs(amt) : Math.abs(amt),
+        method, 
+        category: type === 'income' ? '💰 Bevétel' : cat,
+        month, 
+        fullTime: new Date().toLocaleString('hu-HU', {hour:'2-digit', minute:'2-digit', month:'2-digit', day:'2-digit'})
     };
 
     transactions.push(item);
-    saveAndRefresh();
+    save();
     document.getElementById('amount').value = '';
 }
 
 function deleteItem(id) {
-    if(confirm("Biztosan törlöd ezt a tételt?")) {
+    if(confirm("Biztosan törlöd?")) {
         transactions = transactions.filter(t => t.id !== id);
-        saveAndRefresh();
+        save();
     }
 }
 
-function saveAndRefresh() {
+function resetEverything() {
+    if(confirm("MINDEN ADATOT TÖRÖLSZ?")) {
+        localStorage.clear();
+        transactions = [];
+        location.reload();
+    }
+}
+
+function save() {
     localStorage.setItem('walletData', JSON.stringify(transactions));
     updateUI();
 }
 
 function updateUI() {
-    const selectedMonth = document.getElementById('monthSelector').value;
+    const month = document.getElementById('monthSelector').value;
     const list = document.getElementById('transactionList');
     
-    // 1. EGYENLEG SZÁMÍTÁS (Mindenkori összes adat alapján)
-    let cardBal = 0;
-    let cashBal = 0;
-    transactions.forEach(t => {
-        if (t.method === 'kártya') cardBal += t.amount;
-        else cashBal += t.amount;
-    });
-
-    document.getElementById('cardBalance').innerText = cardBal.toLocaleString() + " Ft";
-    document.getElementById('cashBalance').innerText = cashBal.toLocaleString() + " Ft";
-
-    // 2. LISTA FRISSÍTÉSE (Csak az adott hónap)
-    const filtered = transactions.filter(t => t.month === selectedMonth);
-    list.innerHTML = "";
+    let card = 0, cash = 0;
+    transactions.forEach(t => t.method === 'kártya' ? card += t.amount : cash += t.amount);
     
-    // Legújabb tétel legyen legfelül
+    document.getElementById('cardBalance').innerText = card.toLocaleString() + " Ft";
+    document.getElementById('cashBalance').innerText = cash.toLocaleString() + " Ft";
+
+    const filtered = transactions.filter(t => t.month === month);
+    list.innerHTML = "";
     [...filtered].reverse().forEach(t => {
         const li = document.createElement('li');
         li.className = 't-item';
         li.innerHTML = `
-            <div class="t-info">
-                <strong>${t.category} <small>(${t.method})</small></strong>
-                <small>${t.fullTime}</small>
-            </div>
-            <div class="t-right">
-                <span class="t-amount" style="color: ${t.amount > 0 ? '#00b894' : '#ff7675'}">
-                    ${t.amount.toLocaleString()} Ft
-                </span>
+            <div><strong>${t.category}</strong><br><small>${t.fullTime} (${t.method})</small></div>
+            <div>
+                <span class="t-amount" style="color:${t.amount > 0 ? '#00b894' : '#ff7675'}">${t.amount.toLocaleString()} Ft</span>
                 <button class="delete-btn" onclick="deleteItem(${t.id})">🗑️</button>
-            </div>
-        `;
+            </div>`;
         list.appendChild(li);
     });
 
-    drawCharts(filtered, cardBal, cashBal);
+    drawCharts(filtered, card, cash);
 }
 
-function drawCharts(filteredData, cardTotal, cashTotal) {
-    // Kiadási diagram (Jobb oldal)
+function drawCharts(data, card, cash) {
+    // Kiadás diagram
     const expCtx = document.getElementById('expenseChart').getContext('2d');
-    const expenses = filteredData.filter(t => t.amount < 0);
+    const expenses = data.filter(t => t.amount < 0);
     const cats = [...new Set(expenses.map(t => t.category))];
     const totals = cats.map(c => Math.abs(expenses.filter(t => t.category === c).reduce((s, t) => s + t.amount, 0)));
 
@@ -111,26 +97,17 @@ function drawCharts(filteredData, cardTotal, cashTotal) {
     if (cats.length > 0) {
         expenseChart = new Chart(expCtx, {
             type: 'doughnut',
-            data: { labels: cats, datasets: [{ data: totals, backgroundColor: ['#6c5ce7','#ff7675','#fdcb6e','#00cec9','#fd79a8','#55efc4','#74b9ff'] }] },
+            data: { labels: cats, datasets: [{ data: totals, backgroundColor: ['#6c5ce7','#ff7675','#fdcb6e','#00cec9','#fd79a8','#fab1a0','#55efc4'] }] },
             options: { maintainAspectRatio: false }
         });
     }
 
-    // Egyenleg diagram (Bal oldal)
+    // Egyenleg diagram
     const balCtx = document.getElementById('balanceChart').getContext('2d');
     if (balanceChart) balanceChart.destroy();
     balanceChart = new Chart(balCtx, {
         type: 'pie',
-        data: {
-            labels: ['Kártya', 'KP'],
-            datasets: [{
-                data: [Math.max(0, cardTotal), Math.max(0, cashTotal)],
-                backgroundColor: ['#3498db', '#f1c40f']
-            }]
-        },
-        options: { plugins: { legend: { labels: { color: '#2d3436' } } } }
+        data: { labels: ['Kártya', 'KP'], datasets: [{ data: [Math.max(0,card), Math.max(0,cash)], backgroundColor: ['#3498db', '#f1c40f'] }] },
+        options: { plugins: { legend: { position: 'bottom' } } }
     });
 }
-
-// Indításkor első frissítés
-updateUI();
