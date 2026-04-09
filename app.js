@@ -2,9 +2,7 @@ let transactions = JSON.parse(localStorage.getItem('walletData')) || [];
 let expenseChart = null;
 let balanceChart = null;
 
-// Kezdő hónap beállítása
 document.getElementById('monthSelector').value = new Date().toISOString().slice(0, 7);
-
 document.getElementById('addBtn').addEventListener('click', addItem);
 
 function addItem() {
@@ -30,17 +28,9 @@ function addItem() {
 }
 
 function deleteItem(id) {
-    if(confirm("Biztosan törlöd?")) {
+    if(confirm("Törlöd ezt a tételt?")) {
         transactions = transactions.filter(t => t.id !== id);
         save();
-    }
-}
-
-function resetEverything() {
-    if(confirm("Törölsz minden adatot a memóriából?")) {
-        localStorage.clear();
-        transactions = [];
-        location.reload();
     }
 }
 
