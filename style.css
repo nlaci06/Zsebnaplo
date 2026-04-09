@@ -7,7 +7,7 @@
 
 body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #2d3436; }
 
-/* ASZTALI NÉZET (Alapértelmezett) */
+/* ASZTALI NÉZET */
 .main-wrapper { display: flex; max-width: 1100px; margin: 30px auto; gap: 20px; padding: 0 15px; }
 .sidebar { flex: 1; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: fit-content; }
 .content { flex: 2.5; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
@@ -16,33 +16,30 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); co
 .card-style { background: var(--card); }
 .cash-style { background: var(--cash); }
 
-.input-form { display: flex; flex-direction: column; gap: 12px; background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
+/* Pénzügyek box - Eredeti méretek */
+.input-form { display: flex; flex-direction: column; gap: 10px; background: #f8f9fa; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
 .input-group { display: flex; gap: 10px; }
-.input-group * { flex: 1; min-width: 0; } /* Fontos: min-width: 0 gátolja meg a szétcsúszást */
+.input-group * { flex: 1; }
 
-input, select, button { padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; }
-.primary-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
-.reset-btn { background: #ff7675; color: white; border: none; width: 100%; margin-top: 20px; padding: 10px; border-radius: 10px; cursor: pointer; }
+input, select, button { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+.primary-btn { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; padding: 12px; }
 
 .main-chart-box { height: 300px; margin-bottom: 30px; }
 
-/* MOBIL NÉZET (Automatikusan kapcsol) */
+/* MOBIL AUTOMATIKUS NÉZET */
 @media (max-width: 768px) {
     .main-wrapper { flex-direction: column; margin: 10px; gap: 15px; }
     .sidebar, .content { width: auto; padding: 20px; }
     
-    /* Mobil egyenlegek egymás mellett */
-    .balance-grid { display: flex; gap: 10px; }
-    .balance-card { flex: 1; margin-bottom: 0; padding: 12px; }
-    .balance-card h3 { font-size: 1.1rem; }
+    /* Kártyák mobilon egymás alatt legyenek */
+    .balance-grid { display: block; }
+    .balance-card { margin-bottom: 10px; }
 
-    /* Mobil beviteli mezők egymás alá, hogy kényelmes legyen */
+    /* A beviteli mezők mobilon is tartsák meg a használható méretet */
     .input-group { flex-direction: column; }
-    input, select, button { padding: 14px; font-size: 1.1rem; }
-    
-    header { flex-direction: column; gap: 15px; text-align: center; }
+    header { flex-direction: column; gap: 10px; text-align: center; }
 }
 
 .transaction-list { list-style: none; padding: 0; }
-.t-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
+.t-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
 .delete-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
