@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zseb-Napló Pro - Bingó & Pénzügyek</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <h2>Egyenlegek</h2>
+            <div class="balance-card card-style">
+                <p>💳 Bankkártya</p>
+                <h3 id="cardBalance">0 Ft</h3>
+            </div>
+            <div class="balance-card cash-style">
+                <p>💵 Készpénz</p>
+                <h3 id="cashBalance">0 Ft</h3>
+            </div>
+            <div class="chart-container-mini">
+                <canvas id="balanceChart"></canvas>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header>
+                <h1>Pénzügyi Napló</h1>
+                <input type="month" id="monthSelector" onchange="updateUI()">
+            </header>
+
+            <section class="input-form">
+                <div class="row">
+                    <select id="method">
+                        <option value="kártya">💳 Kártya</option>
+                        <option value="készpénz">💵 KP</option>
+                    </select>
+                    <input type="number" id="amount" placeholder="Összeg (Ft)">
+                    <select id="type">
+                        <option value="expense">Kiadás ➖</option>
+                        <option value="income">Bevétel ➕</option>
+                    </select>
+                </div>
+                <select id="category">
+                    <option value="🐶 Bingó">🐶 Bingó</option>
+                    <option value="🍕 Élelmiszer">🍕 Élelmiszer</option>
+                    <option value="🚌 Közlekedés">🚌 Közlekedés</option>
+                    <option value="🎬 Szórakozás">🎬 Szórakozás</option>
+                    <option value="💊 Egészségügy">💊 Egészségügy</option>
+                    <option value="⚽ Sport">⚽ Sport</option>
+                    <option value="💄 Szépségápolás">💄 Szépségápolás</option>
+                    <option value="📦 Rendelés">📦 Rendelés</option>
+                    <option value="🎁 Ajándék">🎁 Ajándék</option>
+                    <option value="🎰 Játék">🎰 Játék</option>
+                    <option value="❓ Egyéb">❓ Egyéb</option>
+                </select>
+                <button id="addBtn">Hozzáadás</button>
+            </section>
+
+            <h3>Havi kiadások megoszlása</h3>
+            <div class="chart-container-main">
+                <canvas id="expenseChart"></canvas>
+            </div>
+
+            <ul id="transactionList" class="transaction-list">
+                </ul>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
