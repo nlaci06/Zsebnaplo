@@ -1,0 +1,124 @@
+:root {
+    --primary: #6c5ce7;
+    --card-color: #3498db;
+    --cash-color: #f1c40f;
+    --bg: #f0f2f5;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: #2d3436;
+}
+
+.main-wrapper {
+    display: flex;
+    max-width: 1100px;
+    margin: 30px auto;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+/* Sidebar stílus */
+.sidebar {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    height: fit-content;
+}
+
+.balance-card {
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.card-style { background: var(--card-color); }
+.cash-style { background: var(--cash-color); }
+
+/* Fő tartalom stílus */
+.content {
+    flex: 2.5;
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.row { display: flex; gap: 10px; }
+.row select, .row input { flex: 1; }
+
+input, select, button {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Diagram konténerek */
+.chart-container-main { height: 300px; margin-bottom: 30px; }
+.chart-container-mini { margin-top: 20px; }
+
+/* Lista stílus */
+.transaction-list {
+    list-style: none;
+    padding: 0;
+}
+
+.t-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.t-info strong { display: block; font-size: 1rem; }
+.t-info small { color: #b2bec3; font-size: 0.75rem; }
+
+.t-right { display: flex; align-items: center; gap: 15px; }
+.t-amount { font-weight: bold; }
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .main-wrapper { flex-direction: column; }
+}
