@@ -2,18 +2,9 @@ let transactions = JSON.parse(localStorage.getItem('walletData')) || [];
 let expenseChart = null;
 let balanceChart = null;
 
-// NÉZET BEÁLLÍTÁSA
-function setView(mode) {
-    if (mode === 'mobile') {
-        document.body.classList.add('mobile-view');
-    }
-    document.getElementById('viewSelector').classList.add('hidden');
-    document.getElementById('appContainer').classList.remove('hidden');
-    updateUI();
-}
-
-// Alap dátum
+// Automatikus dátum beállítás
 document.getElementById('monthSelector').value = new Date().toISOString().slice(0, 7);
+
 document.getElementById('addBtn').addEventListener('click', addItem);
 
 function addItem() {
@@ -25,29 +16,28 @@ function addItem() {
 
     if (!amt || amt <= 0) return;
 
-    const item = {
+    transactions.push({
         id: Date.now(),
         amount: type === 'expense' ? -Math.abs(amt) : Math.abs(amt),
         method, 
         category: type === 'income' ? '💰 Bevétel' : cat,
         month, 
         fullTime: new Date().toLocaleString('hu-HU', {hour:'2-digit', minute:'2-digit', month:'2-digit', day:'2-digit'})
-    };
+    });
 
-    transactions.push(item);
     save();
     document.getElementById('amount').value = '';
 }
 
 function deleteItem(id) {
-    if(confirm("Biztosan törlöd?")) {
+    if(confirm("Törlöd ezt a tételt?")) {
         transactions = transactions.filter(t => t.id !== id);
         save();
     }
 }
 
 function resetEverything() {
-    if(confirm("MINDEN ADATOT TÖRÖLSZ?")) {
+    if(confirm("MINDEN adatot törölsz a memóriából?")) {
         localStorage.clear();
         transactions = [];
         location.reload();
@@ -87,7 +77,6 @@ function updateUI() {
 }
 
 function drawCharts(data, card, cash) {
-    // Kiadás diagram
     const expCtx = document.getElementById('expenseChart').getContext('2d');
     const expenses = data.filter(t => t.amount < 0);
     const cats = [...new Set(expenses.map(t => t.category))];
@@ -98,11 +87,10 @@ function drawCharts(data, card, cash) {
         expenseChart = new Chart(expCtx, {
             type: 'doughnut',
             data: { labels: cats, datasets: [{ data: totals, backgroundColor: ['#6c5ce7','#ff7675','#fdcb6e','#00cec9','#fd79a8','#fab1a0','#55efc4'] }] },
-            options: { maintainAspectRatio: false }
+            options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
         });
     }
 
-    // Egyenleg diagram
     const balCtx = document.getElementById('balanceChart').getContext('2d');
     if (balanceChart) balanceChart.destroy();
     balanceChart = new Chart(balCtx, {
@@ -111,3 +99,5 @@ function drawCharts(data, card, cash) {
         options: { plugins: { legend: { position: 'bottom' } } }
     });
 }
+
+updateUI();
