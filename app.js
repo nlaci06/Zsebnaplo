@@ -2,7 +2,7 @@ let transactions = JSON.parse(localStorage.getItem('walletData')) || [];
 let expenseChart = null;
 let balanceChart = null;
 
-// Automatikus dátum beállítás
+// Kezdő hónap beállítása
 document.getElementById('monthSelector').value = new Date().toISOString().slice(0, 7);
 
 document.getElementById('addBtn').addEventListener('click', addItem);
@@ -30,14 +30,14 @@ function addItem() {
 }
 
 function deleteItem(id) {
-    if(confirm("Törlöd ezt a tételt?")) {
+    if(confirm("Biztosan törlöd?")) {
         transactions = transactions.filter(t => t.id !== id);
         save();
     }
 }
 
 function resetEverything() {
-    if(confirm("MINDEN adatot törölsz a memóriából?")) {
+    if(confirm("Törölsz minden adatot a memóriából?")) {
         localStorage.clear();
         transactions = [];
         location.reload();
@@ -67,7 +67,7 @@ function updateUI() {
         li.innerHTML = `
             <div><strong>${t.category}</strong><br><small>${t.fullTime} (${t.method})</small></div>
             <div>
-                <span class="t-amount" style="color:${t.amount > 0 ? '#00b894' : '#ff7675'}">${t.amount.toLocaleString()} Ft</span>
+                <span style="font-weight:bold; color:${t.amount > 0 ? '#00b894' : '#ff7675'}">${t.amount.toLocaleString()} Ft</span>
                 <button class="delete-btn" onclick="deleteItem(${t.id})">🗑️</button>
             </div>`;
         list.appendChild(li);
